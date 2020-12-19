@@ -4,7 +4,7 @@ import { exit, env } from 'process';
 import dotenv from 'dotenv';
 
 const schema = object({
-  HOST: string().default('local'),
+  LOGGING_LEVEL: string().valid('debug', 'info', 'error', 'warn').default('info'),
   PORT: number().default(3000),
   DYNAMO_ENDPOINT: string().default('http://localhost:27018'),
   DYNAMO_REGION: string().default('sa-east-1'),
@@ -13,12 +13,12 @@ const schema = object({
 });
 
 type EnvironmentVariable =
-  'HOST' |
   'PORT' |
   'DYNAMO_ENDPOINT' |
   'DYNAMO_REGION' |
   'DYNAMO_ACCESS_KEY_ID' |
-  'DYNAMO_SECRET_ACCESS_KEY';
+  'DYNAMO_SECRET_ACCESS_KEY' |
+  'LOGGING_LEVEL';
 
 @Singleton
 export class ConfigurationService {
@@ -34,15 +34,15 @@ export class ConfigurationService {
         allowUnknown: true
       });
     } catch (error) {
-      const configErrors = error.message.split('. ');
-      console.error({ configErrors });
+      console.log('[CONFIGURATION] Cannot find some required variables in environment: \n')
+      const configErrors = error.message.replace('. ', '\n');
+      console.error(configErrors);
       exit();
     }
+    console.log('[CONFIGURATION] All required variables found in environment!\n')
   }
 
   get<T>(name: EnvironmentVariable): T {
-    const value = <T>this.variables[name];
-    return <T>value;
+    return <T>this.variables[name];
   }
 }
-

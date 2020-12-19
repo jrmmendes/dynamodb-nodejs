@@ -5,8 +5,7 @@ import { ConfigurationService } from "./configuration";
 @InRequestScope
 export class DatabaseService {
 
-  @Inject
-  private config: ConfigurationService;
+  @Inject private config: ConfigurationService;
 
   public dynamo: DynamoDB;
 
