@@ -1,10 +1,9 @@
-import { DynamoDB } from "aws-sdk";
-import { Inject, InRequestScope } from "typescript-ioc";
-import { ConfigurationService } from "./configuration";
+import { DynamoDB } from 'aws-sdk';
+import { Inject, InRequestScope } from 'typescript-ioc';
+import { ConfigurationService } from './configuration';
 
 @InRequestScope
 export class DatabaseService {
-
   @Inject private config: ConfigurationService;
 
   public dynamo: DynamoDB;

@@ -11,9 +11,11 @@ import { Logger } from './common/logger';
 
 export class Application {
   @Inject private config: ConfigurationService;
+
   @Inject private logger: Logger;
 
   private app: express.Application;
+
   private port: number;
 
   constructor() {
@@ -30,7 +32,7 @@ export class Application {
           .logger
           .label('Req')
           .info(message),
-      }
+      },
     }));
     this.app.use(helmet());
 
@@ -38,13 +40,13 @@ export class Application {
   }
 
   registerRoutes() {
-    this.app.get('/', (req, res) => {
+    this.app.get('/', (_req, res) => {
       const db = Container.get(DatabaseService);
       db.dynamo.createTable({
         TableName: 'books',
         KeySchema: [{
           AttributeName: 'author',
-          KeyType: 'HASH'
+          KeyType: 'HASH',
         },
         {
           AttributeName: 'name',
@@ -52,16 +54,16 @@ export class Application {
         }],
         AttributeDefinitions: [{
           AttributeName: 'author',
-          AttributeType: 'S'
+          AttributeType: 'S',
         },
         {
           AttributeName: 'name',
-          AttributeType: 'S'
+          AttributeType: 'S',
         }],
         ProvisionedThroughput: {
           ReadCapacityUnits: 5,
-          WriteCapacityUnits: 5
-        }
+          WriteCapacityUnits: 5,
+        },
       }, (err, data) => {
         res.status(200).send({ payload: err || data });
       });
@@ -76,7 +78,7 @@ export class Application {
       () => this
         .logger
         .label('express')
-        .info(`Server started @ ${this.port}`)
+        .info(`Server started @ ${this.port}`),
     );
   }
 }

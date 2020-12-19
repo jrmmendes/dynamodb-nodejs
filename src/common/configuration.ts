@@ -1,5 +1,8 @@
+/* eslint-disable no-console */
 import { Singleton } from 'typescript-ioc';
-import { attempt, number, object, string } from 'joi';
+import {
+  attempt, number, object, string,
+} from 'joi';
 import { exit, env } from 'process';
 import dotenv from 'dotenv';
 
@@ -22,7 +25,6 @@ type EnvironmentVariable =
 
 @Singleton
 export class ConfigurationService {
-
   private variables;
 
   constructor() {
@@ -31,18 +33,18 @@ export class ConfigurationService {
     try {
       this.variables = attempt(env, schema, {
         abortEarly: false,
-        allowUnknown: true
+        allowUnknown: true,
       });
     } catch (error) {
-      console.log('[CONFIGURATION] Cannot find some required variables in environment: \n')
+      console.log('[CONFIGURATION] Cannot find some required variables in environment: \n');
       const configErrors = error.message.replace('. ', '\n');
       console.error(configErrors);
       exit();
     }
-    console.log('[CONFIGURATION] All required variables found in environment!\n')
+    console.log('[CONFIGURATION] All required variables found in environment!\n');
   }
 
   get<T>(name: EnvironmentVariable): T {
-    return <T>this.variables[name];
+    return <T> this.variables[name];
   }
 }

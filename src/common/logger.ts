@@ -4,27 +4,26 @@ import {
   format,
   transports,
   Logger as WinstonLogger,
-  level
 } from 'winston';
 import { ConfigurationService } from './configuration';
 
-const { combine, printf, timestamp } = format;
+const { combine, printf, timestamp: timestampFormat } = format;
 
 export class Logger {
-
   @Inject config: ConfigurationService;
 
   private instance: WinstonLogger;
+
   private logLabel: string;
 
   constructor() {
     this.instance = createLogger({
       level: this.config.get<string>('LOGGING_LEVEL'),
       format: combine(
-        timestamp({ format: 'hh:mm:ss' }),
+        timestampFormat({ format: 'hh:mm:ss' }),
         printf(({ message, timestamp }) => (
           `[${timestamp}] ${message}`
-        ))
+        )),
       ),
       transports: [new transports.Console()],
     });
@@ -47,12 +46,12 @@ export class Logger {
   error(message: string) {
     return this.log('error', message);
   }
-  
+
   warn(message: string) {
     return this.log('warn', message);
   }
 
   debug(message: string) {
     return this.log('debug', message);
-  }  
+  }
 }
