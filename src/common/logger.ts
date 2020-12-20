@@ -1,4 +1,4 @@
-import { Container, Inject } from 'typescript-ioc';
+import { Container, Inject, Singleton } from 'typescript-ioc';
 import {
   createLogger,
   format,
@@ -9,6 +9,7 @@ import { ConfigurationService } from './configuration';
 
 const { combine, printf, timestamp: timestampFormat } = format;
 
+@Singleton
 export class Logger {
   @Inject config: ConfigurationService;
 

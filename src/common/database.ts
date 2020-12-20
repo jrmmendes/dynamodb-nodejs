@@ -1,19 +1,18 @@
-import { DynamoDB } from 'aws-sdk';
+import dynamoose from 'dynamoose';
 import { Inject, InRequestScope } from 'typescript-ioc';
 import { ConfigurationService } from './configuration';
+import { Logger } from './logger';
 
 @InRequestScope
 export class DatabaseService {
   @Inject private config: ConfigurationService;
 
-  public dynamo: DynamoDB;
+  @Inject private logger: Logger;
 
   constructor() {
-    this.dynamo = new DynamoDB({
-      endpoint: this.config.get<string>('DYNAMO_ENDPOINT'),
-      region: this.config.get<string>('DYNAMO_REGION'),
-      accessKeyId: this.config.get<string>('DYNAMO_SECRET_ACCESS_KEY'),
-      secretAccessKey: this.config.get<string>('DYNAMO_SECRET_ACCESS_KEY'),
-    });
+    if (this.config.isLocal) {
+      this.logger.label('TEST').info('Using DynamoDB Local');
+      dynamoose.aws.ddb.local();
+    }
   }
 }
