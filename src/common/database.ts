@@ -1,17 +1,20 @@
 import dynamoose from 'dynamoose';
-import { Inject, InRequestScope } from 'typescript-ioc';
+import { Inject } from 'typescript-ioc';
 import { ConfigurationService } from './configuration';
 import { Logger } from './logger';
 
-@InRequestScope
-export class DatabaseService {
-  @Inject private config: ConfigurationService;
+export abstract class DatabaseService {
+  @Inject private static config: ConfigurationService;
 
-  @Inject private logger: Logger;
+  @Inject private static logger: Logger;
 
-  constructor() {
+  static init() {
     if (this.config.isLocal) {
-      this.logger.label('TEST').info('Using DynamoDB Local');
+      this
+        .logger
+        .label('DATABASE')
+        .info('Using DynamoDB Local');
+
       dynamoose.aws.ddb.local();
     }
   }

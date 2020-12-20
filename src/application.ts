@@ -19,7 +19,7 @@ export class Application {
   private port: number;
 
   constructor() {
-    Container.get(DatabaseService);
+    DatabaseService.init();
     this.port = this.config.get<number>('PORT');
     this.app = express();
   }
