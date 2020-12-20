@@ -17,6 +17,7 @@ const schema = object({
   PORT: number().default(3000),
   AWS_ACCESS_KEY_ID: string(),
   AWS_SECRET_ACCESS_KEY: string(),
+  AWS_REGION: string(),
   ENVIRONMENT: string().valid(
     'LOCAL',
     'DEVELOPMENT',
@@ -30,6 +31,7 @@ type EnvironmentVariable =
   'LOGGING_LEVEL' |
   'AWS_ACCESS_KEY_ID' |
   'AWS_SECRET_ACCESS_KEY' |
+  'AWS_REGION' |
   'ENVIRONMENT';
 
 @Singleton

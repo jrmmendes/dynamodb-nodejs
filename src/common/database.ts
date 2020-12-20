@@ -16,6 +16,13 @@ export abstract class DatabaseService {
         .info('Using DynamoDB Local');
 
       dynamoose.aws.ddb.local();
+    } else {
+      const ddb = new dynamoose.aws.sdk.DynamoDB({
+        accessKeyId: this.config.get('AWS_ACCESS_KEY_ID'),
+        secretAccessKey: this.config.get('AWS_SECRET_ACCESS_KEY'),
+        region: this.config.get('AWS_REGION'),
+      });
+      dynamoose.aws.ddb.set(ddb);
     }
   }
 }
