@@ -7,3 +7,11 @@ services:
     command: -jar DynamoDBLocal.jar -sharedDb -dbPath .
     ports:
       - 27018:8000
+
+  sonarqube:
+    image: sonarqube
+    container_name: sonarqube
+    environment: 
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true 
+    ports:
+      - 9000:9000
