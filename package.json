@@ -5,8 +5,11 @@
   "license": "MIT",
   "scripts": {
     "start:dev": "ts-node-dev --respawn --transpile-only --notify --watch --clear --rs src/index.ts",
+    "start": "pm2 start dist/index.js --name API --max-memory-restart 200M -i 2",
     "build": "tsc",
     "test": "jest",
+    "stress:html": "artillery report -o report.html report.json",
+    "stress:run": "artillery run -o report.json stress-config.yaml",
     "quality": "yarn test && sonar-scanner"
   },
   "devDependencies": {
@@ -21,6 +24,7 @@
     "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",
+    "artillery": "^1.6.1",
     "eslint": "^7.16.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
@@ -38,6 +42,7 @@
     "helmet": "^4.2.0",
     "joi": "^17.3.0",
     "morgan": "^1.10.0",
+    "pm2": "^4.5.1",
     "rimraf": "^3.0.2",
     "typescript-ioc": "^3.2.2",
     "uuid": "^8.3.2",
